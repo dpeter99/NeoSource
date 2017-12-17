@@ -1,4 +1,4 @@
-package Math
+package NeoMath
 
 //We have set this to float for now because Kotlin doesn't support using operators on custom type parameters.
 open class Matrix<T>

@@ -1,4 +1,4 @@
-package Math
+package NeoMath
 
 class Vector3
 (
