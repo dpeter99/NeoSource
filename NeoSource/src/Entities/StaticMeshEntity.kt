@@ -1,6 +1,8 @@
 package Entities
 
+import StaticMesh
+
 class StaticMeshEntity: Entity()
 {
-    var staticMesh: StaticMesh
+    var staticMesh: StaticMesh? = null
 }
