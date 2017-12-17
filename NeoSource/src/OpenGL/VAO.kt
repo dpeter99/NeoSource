@@ -1,13 +1,12 @@
 package OpenGL
 
-import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 
 class VAO
 {
     val id: Int
-    val vboIDs = mutableListOf<Int>()
+    private val vboIDs = mutableListOf<Int>()
     
     var ibo: IBO? = null
         private set
@@ -39,4 +38,7 @@ class VAO
         
         this.ibo = ibo
     }
+    
+    //Getter
+    fun getVboIDs() = vboIDs.toList()
 }

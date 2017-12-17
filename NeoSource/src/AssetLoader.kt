@@ -1,3 +1,5 @@
+import OpenGL.IBO
+import OpenGL.VAO
 import OpenGL.VBO
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL15
@@ -24,32 +26,65 @@ fun loadModel(positions: Array<Float>, textureCoordinates: Array<Float>, section
     vboPositions.bufferData(positions)
     vboTextureCoordinates.bufferData(textureCoordinates)
     
+    //VBO List
+    val vboList = listOf(vboPositions, vboTextureCoordinates)
+    
+    
+    //Helper function to automatically add VBOs to stuff and things
+    fun generateVAO(indices: Array<Int>): VAO
+    {
+        //Create VAO
+        val vao = VAO()
+        
+        //Add all common VBOs from list
+        for (vbo in vboList)
+            vao.addVBO(vbo)
+        
+        //Generate and set IBO from indices
+        val ibo = IBO()
+        ibo.bufferData(indices)
+        vao.setIBO(ibo)
+        
+        //Return VAO
+        return vao
+    }
+    
+    fun generateVAOs(data: Array<Array<Int>>): List<VAO>
+    {
+        val vaos = mutableListOf<VAO>()
+        for (indices in data)
+        {
+            val vao = generateVAO(indices)
+            vaos.add(vao)
+        }
+        
+        return vaos.toList()
+    }
+    
+    
+    val meshSections = mutableListOf<MeshSection>()
     
     for (section in sections)
     {
-        val vaoTriangles = fillVAO(section.triangles)
+        val vaoTriangles = generateVAO(section.triangles)
+        val vaosTriangleStrips = generateVAOs(section.triangleStrips)
+        val vaosTriangleFans = generateVAOs(section.triangleFans)
+    
+        val vaoLines = generateVAO(section.lines)
+        val vaosLineStrips = generateVAOs(section.lineStrips)
+        val vaosLineLoops = generateVAOs(section.lineLoops)
+    
+        val vaoPoints = generateVAO(section.points)
         
-        for (indices in section.triangleStrips)
-        {
-            val vaoTriangleStrips = GL30.glGenVertexArrays()
-            fillVAO()
-        }
-        val vaoTriangleFans = GL30.glGenVertexArrays()
-    
-        val vaoLines = GL30.glGenVertexArrays()
-        val vaoLineStips = GL30.glGenVertexArrays()
-        val vaoLoops = GL30.glGenVertexArrays()
-    
-        val vaoPoints = GL30.glGenVertexArrays()
+        //Create mesh section from data above
+        meshSections.add(MeshSection(
+                vaoTriangles, vaosTriangleStrips, vaosTriangleFans,
+                vaoLines, vaosLineStrips, vaosLineLoops,
+                vaoPoints
+        ))
     }
     
-    //For each section create a VAO for every item
-    // Create VBO for indices and Bind
-    // Bind VBOs
-    // Add VAO object to list
-    
-    //Create StaticMesh
-    //Return
+    return StaticMesh(meshSections.toList())
 }
 
 
@@ -65,6 +100,15 @@ class MeshIndices
 
     val points: Array<Int>
 )
+
+class MeshData
+(
+        val positions: Array<Float>,
+        val textureCoordinates: Array<Float>,
+        
+        val sections: Array<MeshIndices>
+)
+
 
 
 fun cleanUp()
