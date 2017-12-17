@@ -10,8 +10,11 @@ open class Entity
     var relativeTransform: Math.Transform = ''
     
     private var parent: Entity? = null
-    
+
+    //Other Entyties that are below this in the world hierarchy
     private val children = mutableListOf<Entity>()
+
+    //Other stuff that is inside this Entity in the world hierarchy and belong to a internal hierarchy
     private val components = mutableListOf<Entity>()
     
     private fun prepAttachment(newParent: Entity?)
@@ -31,7 +34,7 @@ open class Entity
         //TODO: TRANSFORM
         if (newParent != null)
         {
-        
+
         }
         
         parent = newParent
