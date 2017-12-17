@@ -1,36 +1,39 @@
+import OpenGL.VBO
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL30
 
-private val vaos = mutableListOf<VAO>()
+
+private val vaos = mutableListOf<Int>()
+private val vbos = mutableListOf<Int>()
 private val textures = mutableListOf<Int>()
 
 
-val VERTEX_POSITIONS = 0
-val TEXTURE_COORDINATES = 1
-
-val vboAttributeNumbers = listOf<Int>(VERTEX_POSITIONS, TEXTURE_COORDINATES)
+val VAO_POSITIONS = 0
+val VAO_TEXTURE_COORDINATES = 1
 
 
 fun loadModel(positions: Array<Float>, textureCoordinates: Array<Float>, sections: Array<MeshIndices>): StaticMesh
 {
     //Create VBOs
-    val vboPositions = GL15.glGenBuffers()
-    val vboTextureCoordinates = GL15.glGenBuffers()
+    val vboPositions = VBO(VAO_POSITIONS, 3, GL11.GL_FLOAT)
+    val vboTextureCoordinates = VBO(VAO_TEXTURE_COORDINATES, 2, GL11.GL_FLOAT)
     
     //Fill VBOs with data
-    GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions)
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions.toFloatArray(), GL15.GL_STATIC_DRAW)
+    vboPositions.bufferData(positions)
+    vboTextureCoordinates.bufferData(textureCoordinates)
     
-    GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextureCoordinates)
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textureCoordinates.toFloatArray(), GL15.GL_STATIC_DRAW)
-
     
     for (section in sections)
     {
-        val vaoTriangles = GL30.glGenVertexArrays()
-        val vaoTriangleStrips = GL30.glGenVertexArrays()
+        val vaoTriangles = fillVAO(section.triangles)
+        
+        for (indices in section.triangleStrips)
+        {
+            val vaoTriangleStrips = GL30.glGenVertexArrays()
+            fillVAO()
+        }
         val vaoTriangleFans = GL30.glGenVertexArrays()
     
         val vaoLines = GL30.glGenVertexArrays()
@@ -49,13 +52,6 @@ fun loadModel(positions: Array<Float>, textureCoordinates: Array<Float>, section
     //Return
 }
 
-private fun
-
-
-
-
-
-
 
 class MeshIndices
 (
@@ -71,12 +67,15 @@ class MeshIndices
 )
 
 
-
 fun cleanUp()
 {
     //VAOs
     for (vao in vaos)
         GL30.glDeleteVertexArrays(vao)
+    
+    //VBOs
+    for (vbo in vbos)
+        GL15.glDeleteBuffers(vbo)
     
     //Textures
     for (texture in textures)

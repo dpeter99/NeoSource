@@ -18,10 +18,3 @@ class MeshSection
     
     var shader: Shader
 }
-
-class VAO
-(
-    val vaoID: Int,
-    val vertexCount: Int,
-    val vboIDs: List<Int>
-)
