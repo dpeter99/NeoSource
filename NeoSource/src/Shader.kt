@@ -38,7 +38,7 @@ abstract class Shader
     
     //Uniforms
     protected fun loadUniformFloat(location: Int, value: Float) = GL20.glUniform1f(location, value)
-    protected fun loadUniformVector3(location: Int, value: Math.Vector3) = GL20.glUniform3f(location, value.x, value.y, value.z)
+    protected fun loadUniformVector3(location: Int, value: NeoMath.Vector3) = GL20.glUniform3f(location, value.x, value.y, value.z)
     protected fun loadUniformBoolean(location: Int, value: Boolean) = loadUniformInteger(location, if (value) 1 else 0)
     protected fun loadUniformInteger(location: Int, value: Int) = GL20.glUniform1i(location, value)
     //TODO: Matrix4
