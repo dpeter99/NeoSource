@@ -1,4 +1,4 @@
-package Math
+package NeoMath
 
 open class Matrixf: Matrix<Float>
 {
