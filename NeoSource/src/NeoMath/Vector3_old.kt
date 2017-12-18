@@ -1,6 +1,6 @@
 package NeoMath
 
-class Vector3
+class Vector3_old
 (
     var x: Float,
     var y: Float,

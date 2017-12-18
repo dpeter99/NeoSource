@@ -22,7 +22,7 @@ class ProjectionMatrix{
         return new Matrixf(data);
     }
 
-    static Matrixf OrthographicProjectionMatrix(float width, float height, float near, float far)
+    static Matrixf OrthographicProjectionMatrix(Float width, Float height, Float near, Float far)
     {
         Float right = width/2;
         Float left = width/2;

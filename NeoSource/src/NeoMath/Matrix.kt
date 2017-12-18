@@ -3,7 +3,7 @@ package NeoMath
 //We have set this to float for now because Kotlin doesn't support using operators on custom type parameters.
 open class Matrix<T>
 {
-    val data: Array<Array<T>>
+    val data: Array<Array<T>> = Array<Array<T>>();
     
     //Data Constructor
     constructor(data: Array<Array<T>>)
